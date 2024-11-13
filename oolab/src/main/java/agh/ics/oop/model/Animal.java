@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.MapVisualizer;
+
 import java.util.Map;
 
 public class Animal {
@@ -23,15 +25,16 @@ public class Animal {
         return this.position;
     }
 
-    public String toString(Vector2d position, MapDirection direction) {
-        return "Zwierzak jest na: " + this.position.toString() + "i idzie na: " + this.direction.toString();
+    public String toString() {
+        return this.direction.toString();
     }
 
     public boolean isAt (Vector2d position) {
         return this.position.equals(position);
     }
 
-    public void move(MoveDirection direction) {
+    public void move(MoveDirection direction, RectangularMap rectangularMap) {
+        Vector2d potentialPosition;
         switch (direction) {
             case RIGHT:
                 this.direction = this.direction.next();
@@ -40,15 +43,15 @@ public class Animal {
                  this.direction = this.direction.previous();
                  break;
             case FORWARD:
-                if (this.position.add(this.direction.toUnitVector()).follows(new Vector2d(0,0)) &&
-                    this.position.add(this.direction.toUnitVector()).precedes(new Vector2d(4,4)))  {
-                    this.position = this.position.add(this.direction.toUnitVector());
+                potentialPosition = this.position.add(this.direction.toUnitVector());
+                if (rectangularMap.canMoveTo(potentialPosition)) {
+                    this.position = potentialPosition;
                 }
                 break;
             case BACKWARD:
-                if (this.position.subtract(this.direction.toUnitVector()).follows(new Vector2d(0,0)) &&
-                        this.position.subtract(this.direction.toUnitVector()).precedes(new Vector2d(4,4)))  {
-                    this.position = this.position.subtract(this.direction.toUnitVector());
+                potentialPosition = this.position.subtract(this.direction.toUnitVector());
+                if (rectangularMap.canMoveTo(potentialPosition)) {
+                    this.position = potentialPosition;
                 }
                 break;
             default:
