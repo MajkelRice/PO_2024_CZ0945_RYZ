@@ -4,7 +4,7 @@ import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.Map;
 
-public class Animal {
+public class Animal implements WorldElement{
     private Vector2d position;
     private MapDirection direction;
 
@@ -33,7 +33,7 @@ public class Animal {
         return this.position.equals(position);
     }
 
-    public void move(MoveDirection direction, RectangularMap rectangularMap) {
+    public void move(MoveDirection direction, WorldMap map) {
         Vector2d potentialPosition;
         switch (direction) {
             case RIGHT:
@@ -44,13 +44,13 @@ public class Animal {
                  break;
             case FORWARD:
                 potentialPosition = this.position.add(this.direction.toUnitVector());
-                if (rectangularMap.canMoveTo(potentialPosition)) {
+                if (map.canMoveTo(potentialPosition)) {
                     this.position = potentialPosition;
                 }
                 break;
             case BACKWARD:
                 potentialPosition = this.position.subtract(this.direction.toUnitVector());
-                if (rectangularMap.canMoveTo(potentialPosition)) {
+                if (map.canMoveTo(potentialPosition)) {
                     this.position = potentialPosition;
                 }
                 break;
