@@ -55,4 +55,10 @@ public class OptionsParserTest {
         );
         assertEquals(expected, OptionsParser.parse(args));
     }
+
+    @Test
+    void parse_shouldThrowExceptionForUnknownDirection() {
+        String[] args = {"x"};
+        assertThrows(IllegalArgumentException.class, () -> OptionsParser.parse(args));
+    }
 }
