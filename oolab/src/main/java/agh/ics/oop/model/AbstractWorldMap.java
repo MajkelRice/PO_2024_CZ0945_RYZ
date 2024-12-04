@@ -36,6 +36,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public boolean place(Animal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
+            notifyObservers("Animal placed at " + animal.getPosition());
             return true;
         }
         throw new IncorrectPositionException(animal.getPosition());
@@ -47,6 +48,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal.move(direction, this);
         animals.remove(oldPosition);
         animals.put(animal.getPosition(), animal);
+        notifyObservers("Animal moved at " + oldPosition + "to " + animal.getPosition());
     }
 
     @Override
@@ -75,5 +77,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public String toString() {
         return visualizer.draw(getBoundary().lowerLeft(), getBoundary().upperRight());
+    }
+
+    @Override
+    public UUID getId() {
+        return UUID.randomUUID();
     }
 }
