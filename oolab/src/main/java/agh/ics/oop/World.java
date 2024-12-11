@@ -29,7 +29,7 @@ public class World {
 
             List<Simulation> simulations = new ArrayList<>();
 
-            for (int i = 0; i < 1000;i++) {
+            for (int i = 0; i < 50;i++) {
                 AbstractWorldMap map = i % 2 == 0 ? new GrassField(10) : new RectangularMap(5,5);
                 map.addObserver(new ConsoleMapDisplay());
                 Simulation simulation = new Simulation(directions, positions, map);
