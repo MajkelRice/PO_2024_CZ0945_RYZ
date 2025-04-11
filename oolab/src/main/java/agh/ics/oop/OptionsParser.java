@@ -21,6 +21,9 @@ public class OptionsParser {
                 case "b":
                     directions[i] = MoveDirection.BACKWARD;
                     break;
+                default:
+                    directions[i] = MoveDirection.FAILED;
+                    break;
 
             }
         }
