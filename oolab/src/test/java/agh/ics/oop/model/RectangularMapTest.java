@@ -1,52 +1,82 @@
 package agh.ics.oop.model;
+import agh.ics.oop.model.util.IncorrectPositionException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RectangularMapTest {
     @Test
     public void testIfMapWorks(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal = new Animal();
-        map.place(animal);
+        try {
+            assertTrue(map.place(animal));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         map.move(animal, MoveDirection.FORWARD);
         assertEquals(new Vector2d(2, 3), animal.getPosition());
     }
 
     @Test
     public void testCanMoveTo1(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal1 = new Animal();
-        map.place(animal1);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         assertTrue(map.canMoveTo(new Vector2d(2, 3)));
         assertFalse(map.canMoveTo(new Vector2d(2, 2)));
     }
 
     @Test
     public void testCanMoveTo2(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal1 = new Animal();
-        Animal animal2 = new Animal(new Vector2d(2, 3), MapDirection.SOUTH);
-        map.place(animal1);
-        map.place(animal2);
+        Animal animal2 = new Animal(new Vector2d(2, 3),MapDirection.SOUTH);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        try {
+            assertTrue(map.place(animal2));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         assertFalse(map.canMoveTo(new Vector2d(2, 3)));
     }
 
     @Test
     public void testPlace(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal1 = new Animal();
-        Animal animal2 = new Animal(new Vector2d(2, 2), MapDirection.SOUTH);
-        assertTrue(map.place(animal1));
-        assertFalse(map.place(animal2));
+        Animal animal2 = new Animal(new Vector2d(2, 2),MapDirection.SOUTH);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+
+        assertThrows(IncorrectPositionException.class, () -> map.place(animal2));
     }
 
     @Test
     public void testMove(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal1 = new Animal();
-        Animal animal2 = new Animal(new Vector2d(3, 2), MapDirection.SOUTH);
-        map.place(animal1);
-        map.place(animal2);
+        Animal animal2 = new Animal(new Vector2d(3, 2),MapDirection.SOUTH);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        try {
+            assertTrue(map.place(animal2));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         map.move(animal1, MoveDirection.FORWARD);
         map.move(animal2, MoveDirection.FORWARD);
         assertEquals(new Vector2d(2, 3), animal1.getPosition());
@@ -55,23 +85,53 @@ public class RectangularMapTest {
 
     @Test
     public void testIsOccupied(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal1 = new Animal();
-        Animal animal2 = new Animal(new Vector2d(2, 2), MapDirection.SOUTH);
-        map.place(animal1);
-        map.place(animal2);
+        Animal animal2 = new Animal(new Vector2d(2, 2),MapDirection.SOUTH);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        assertThrows(IncorrectPositionException.class, () -> map.place(animal2));
         assertTrue(map.isOccupied(new Vector2d(2, 2)));
         assertFalse(map.isOccupied(new Vector2d(2, 3)));
     }
 
     @Test
     public void testObjectAt(){
-        RectangularMap map = new RectangularMap(10, 5);
+        WorldMap map = new RectangularMap(10, 5);
         Animal animal1 = new Animal();
-        Animal animal2 = new Animal(new Vector2d(2, 3), MapDirection.SOUTH);
-        map.place(animal1);
-        map.place(animal2);
+        Animal animal2 = new Animal(new Vector2d(2, 3),MapDirection.SOUTH);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        try {
+            assertTrue(map.place(animal2));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
         assertEquals(animal1, map.objectAt(new Vector2d(2, 2)));
         assertEquals(animal2, map.objectAt(new Vector2d(2, 3)));
+    }
+
+    @Test
+    public void testGetElements(){
+        WorldMap map = new RectangularMap(10, 5);
+        Animal animal1 = new Animal();
+        Animal animal2 = new Animal(new Vector2d(2, 3),MapDirection.SOUTH);
+        try {
+            assertTrue(map.place(animal1));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        try {
+            assertTrue(map.place(animal2));
+        } catch (IncorrectPositionException e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        assertEquals(2, map.getElements().size());
     }
 }
